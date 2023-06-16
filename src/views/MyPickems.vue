@@ -19,8 +19,22 @@ let rank = ref(0)
 
 onBeforeMount(async () => {
   groupStageGroups.value = await getGroups()
-  teams.value = getTeams(groupStageGroups.value)
+  teams.value = getTeams(groupStageGroups.value).sort((a, b) => a.name.localeCompare(b.name))
+
 })
+
+function teamIsInGroup(teamName) {
+  for(let standing of group.value.team_standings) {
+    if(standing.team.name === teamName)
+      return true
+  }
+  return false
+}
+
+function filterTeams() {
+  if(group.value)
+    return teams.value.filter(team => teamIsInGroup(team.name))
+}
 
 
 function selectTeam(groupSelected, rankSelected) {
@@ -118,7 +132,7 @@ function selectTeam(groupSelected, rankSelected) {
         </v-alert>
       </v-col>
     </v-row>
-    <teamSelection v-model="dialogTeam"/>
+    <teamSelection v-model="dialogTeam" :teams="filterTeams()" :rank="rank" :group="group"/>
   </v-container>
 </template>
 <style scoped lang="scss">
