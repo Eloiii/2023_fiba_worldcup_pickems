@@ -3,7 +3,7 @@
     <v-card>
       <v-toolbar color="transparent" theme="dark">
         <v-toolbar-title class="text-h5 font-weight-bold">
-          Select a team that finishes {{ rank === 1 ? '1st' : '2nd' }} in {{ group.name.split(',')[1].trim() }}
+          Select a team that finishes {{ rank === 1 ? '1st' : '2nd' }} in {{ group['name'].split(',')[1].trim() }}
         </v-toolbar-title>
 
         <template v-slot:append>
