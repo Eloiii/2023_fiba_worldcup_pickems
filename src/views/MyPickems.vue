@@ -24,15 +24,15 @@ onBeforeMount(async () => {
 })
 
 function teamIsInGroup(teamName) {
-  for(let standing of group.value["team_standings"]) {
-    if(standing.team.name === teamName)
+  for (let standing of group.value["team_standings"]) {
+    if (standing.team.name === teamName)
       return true
   }
   return false
 }
 
 function filterTeams() {
-  if(group.value)
+  if (group.value)
     return teams.value.filter(team => teamIsInGroup(team.name))
 }
 

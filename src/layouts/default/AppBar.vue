@@ -76,18 +76,18 @@ function login() {
         console.log("Document data:", docSnap.data());
       } else {
         console.log("new user")
-       const newUser = {
-        name: user.displayName,
-        picture: user.photoURL,
-        uid: user.uid,
-        pickem: {
-          groupStage: {},
-          secondRound: {},
-          finalPhase: {},
-          lastUpdated: new Date()
+        const newUser = {
+          name: user.displayName,
+          picture: user.photoURL,
+          uid: user.uid,
+          pickem: {
+            groupStage: {},
+            secondRound: {},
+            finalPhase: {},
+            lastUpdated: new Date()
+          }
         }
-      }
-      await setDoc(doc(db, "users", user.uid), newUser);
+        await setDoc(doc(db, "users", user.uid), newUser);
       }
 
     }).catch((error) => {
