@@ -13,12 +13,12 @@
       </v-toolbar>
       <v-card-text>
         <v-row jusity="center" align="center">
-          <v-col v-for="team in teams" :key="team" cols="12" md="3">
+          <v-col v-for="team in teams" :key="team" cols="12" lg="3" md="4">
             <v-card variant="outlined" @click="validate(team)">
               <v-card-text class="flex-0-0 d-flex">
                 <v-row align="center">
                   <v-col cols="5">
-                    <v-img :src="getCountryFlag(team.name, codes)" height="64" width="64" alt="youpi">
+                    <v-img :src="getCountryFlag(team.name, countryCodes)" alt="youpi" height="64" width="64">
 
                     </v-img>
                   </v-col>
@@ -35,31 +35,26 @@
   </v-dialog>
 </template>
 <script setup lang="ts">
-import {computed, onBeforeMount, ref} from 'vue'
+import {computed} from 'vue'
 
-import {getCountryCodes, getCountryFlag} from "@/api";
+import {getCountryFlag} from "@/api";
 
 
 const props = defineProps({
   value: Boolean,
   group: Object,
   rank: Number,
-  teams: Array
+  teams: Array,
+  countryCodes: Array
 })
 
-
-const codes = ref([])
-
-onBeforeMount(async () => {
-  codes.value = await getCountryCodes()
-})
 
 function validate(team) {
-  console.log(team)
+  emit('validate', [team, props.group, props.rank])
   show.value = false
 }
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'validate'])
 
 const show = computed({
   get() {
