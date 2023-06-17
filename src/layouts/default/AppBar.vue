@@ -42,12 +42,14 @@
 </template>
 
 <script lang="ts" setup>
-import {useCurrentUser} from 'vuefire'
+import {useCurrentUser, useFirestore} from 'vuefire'
 import {getAuth, GoogleAuthProvider, signInWithPopup, signOut} from "firebase/auth";
+import {doc, getDoc, setDoc} from "firebase/firestore";
 
+const db = useFirestore()
 const user = useCurrentUser()
-const provider = new GoogleAuthProvider();
 const auth = getAuth();
+const provider = new GoogleAuthProvider();
 
 let errorCode = null
 let errorMessage = null
@@ -60,10 +62,30 @@ function logout() {
 
 function login() {
   signInWithPopup(auth, provider)
-    .then((result) => {
-      // const credential = GoogleAuthProvider.credentialFromResult(result);
-      // const token = credential.accessToken;
-      // const user = result.user;
+    .then(async (result) => {
+      const user = result.user;
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+      } else {
+        console.log("new user")
+       const newUser = {
+        name: user.displayName,
+        picture: user.photoURL,
+        uid: user.uid,
+        pickem: {
+          groupStage: {},
+          secondRound: {},
+          finalPhase: {},
+          lastUpdated: new Date()
+        }
+      }
+      await setDoc(doc(db, "users", user.uid), newUser);
+      }
+
     }).catch((error) => {
     errorCode = error.code;
     errorMessage = error.message;
