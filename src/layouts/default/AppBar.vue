@@ -9,14 +9,14 @@
     <v-spacer></v-spacer>
 
     <div class="mr-5">
-      <v-btn icon v-if="!user" @click="login">
+      <v-btn icon v-if="user === null || user === undefined" @click="login">
         <v-icon color="primary">mdi-account-circle</v-icon>
       </v-btn>
       <v-tooltip text="Sign out" v-else>
         <template v-slot:activator="{ props }">
           <v-avatar @click="logout" class="pointer" v-bind="props">
             <v-img
-              :src="user.providerData[0].photoURL"
+              :src="getUserPicture()"
               alt="photo"
             ></v-img>
           </v-avatar>
@@ -55,6 +55,10 @@ let errorCode = null
 let errorMessage = null
 
 let dialog = false
+
+function getUserPicture() {
+  return "providerData" in user.value ? user.value.providerData[0].photoURL : undefined
+}
 
 function logout() {
   signOut(auth)

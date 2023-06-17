@@ -9,9 +9,9 @@ const user = useCurrentUser()
 const items = [{name: 'Group Stage', startDate: new Date()}, {
   name: 'Second Round',
   startDate: new Date(2023, 7, 30)
-}, {name: 'Finale phase', startDate: new Date(2023, 8, 4)}]
+}, {name: 'Final phase', startDate: new Date(2023, 8, 4)}]
 let tab = ref(items[0])
-let groupStageGroups = ref(null)
+let groupStageGroups = ref([])
 let teams = ref([])
 let dialogTeam = ref(false)
 let group = ref(null)
@@ -24,7 +24,7 @@ onBeforeMount(async () => {
 })
 
 function teamIsInGroup(teamName) {
-  for(let standing of group.value.team_standings) {
+  for(let standing of group.value["team_standings"]) {
     if(standing.team.name === teamName)
       return true
   }
